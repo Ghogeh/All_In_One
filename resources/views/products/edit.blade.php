@@ -1,4 +1,5 @@
-@extends('layout.app')
+@extends('layout.admin_master')
+
 @section('title') Home @endsection
 @section('contents')
 

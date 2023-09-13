@@ -33,7 +33,7 @@ class ResetPasswordController extends Controller
 
     return $status === Password::RESET_LINK_SENT
                 ? back()->with(['msg' => __($status)])
-                : redirect()->back()->whith('msg', "you couldn't reset");
+                : redirect()->back()->with('msg', "you couldn't reset");
     }
 
 
@@ -64,6 +64,6 @@ class ResetPasswordController extends Controller
 
         return $status === Password::PASSWORD_RESET
                     ? redirect()->route('login')->with('status', __($status))
-                    : redirect()->back()->whith('msg', "you couldn't reset");
+                    : redirect()->back()->with('msg', "you couldn't reset");
     }
 }

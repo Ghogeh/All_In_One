@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
@@ -41,12 +42,17 @@ Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']
 
 
 //=============email verification=============//
+
+//route return view instructing user to verify mail
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
 ->middleware('auth')->name('verification.notice');
+
+//route that handles requests generated when the user click verification email
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
 ->middleware(['auth', 'signed'])->name('verification.verify');
 
+//route for resend email
 
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
 ->middleware(['auth', 'throttle:6,1'])->name('verification.send');
@@ -55,11 +61,16 @@ Route::post('/email/verification-notification', [EmailVerificationController::cl
 Route::resource('/products', ProductsController::class);
 
 
-//=================users==========//
+//==================users==========//
 Route::resource('/users', UsersController::class);
 
 
 
-// ==================import and export excel file===================//
-Route::post('/import', [UsersController::class, 'importExcel'])->name('import');
-Route::get('/export', [UsersController::class, 'exportExcel'])->name('export');
+// ==================import and export excel file for Users===================//
+Route::post('/import/users', [UsersController::class, 'importExcel'])->name('import');
+Route::get('/export/users', [UsersController::class, 'exportExcel'])->name('export');
+
+
+// ==================import and export excel file for Products===================//
+Route::post('/import/products', [ProductsController::class, 'P_importExcel'])->name('import.product');
+Route::get('/export/products', [ProductsController::class, 'P_exportExcel'])->name('export.product');

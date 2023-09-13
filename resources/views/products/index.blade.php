@@ -1,4 +1,5 @@
-@extends('layout.app')
+@extends('layout.admin_master')
+
 @section('title') Home @endsection
 @section('contents')
 
@@ -12,6 +13,25 @@
 
         <div class="table-responsive">
             <a href="{{ route('products.create') }}" class="btn btn-dark m-3 text-center">Add</a>
+            <a href="{{ route('export.product') }}" class="btn btn-dark m-3 text-center">Export</a>
+
+            {{-- import file  --}}
+            <form action="{{ route('import.product') }}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+                @csrf
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="file" name="excel" class="form-control">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="submit" value="Import" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
 
             <table class="table">
                 <thead class="thead-dark">

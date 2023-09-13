@@ -24,7 +24,7 @@ class AuthController extends Controller
                 'msg' => "validation problem",
                 'error' => $validateUser->errors()
             ]);
-        }
+        } 
 
        try {
            $user = User::create([
@@ -33,7 +33,7 @@ class AuthController extends Controller
                  'password' => Hash::make($request->password),
            ]);
 
-           $token = $user->createToken('cpanel-token')->plainTextToken;
+           $token = $user->createToken('all_in_one-token')->plainTextToken;
            return response()->json([
             'status' =>true,
             'msg' => "user created",
@@ -69,7 +69,7 @@ class AuthController extends Controller
 
             if(Auth::attempt($request->only(['email', 'password']))) {
               $user = User::where('email', $request->email)->first();
-              $token = $user->createToken('cpanel-token')->plainTextToken;
+              $token = $user->createToken('all_in_one-token')->plainTextToken;
               return response()->json([
                 'status' =>true,
                 'msg' => "login successfully",

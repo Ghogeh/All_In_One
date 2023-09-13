@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Exports\UserExport;
+
 use App\Http\Controllers\Controller;
 use App\Imports\UserImport;
 use App\Models\User;
@@ -29,7 +30,9 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     {
+        // $this->authorize('view', Auth::user());
         $users = User::paginate(10);
         return view('users.index', compact('users'));
     }
@@ -66,6 +69,8 @@ class UsersController extends Controller
                  'password' => Hash::make($request->password),
            ]);
             $user->syncPermissions($request->permissions, []);
+            ///Send Email///
+            // Mail:: to($user->email)->send(new UserMailer($user));
             return redirect()->route('users.index')->with('msg', "User has created successfully");
 
       }catch(\Exception $e) {

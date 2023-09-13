@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 
 class ProductsController extends Controller
 {
@@ -61,8 +64,10 @@ class ProductsController extends Controller
 
        if($request->hasFile('image')) {
              $image = $request->file('image');
-             $imageName = time().'.'.$image->getClientOriginalName();
-             Storage::disk('public')->putFileAs('products', $image, $imageName);
+             $imageName = time().'_'.$image->getClientOriginalName();
+            //  Storage::disk('public')->putFileAs('products', $image, $imageName);
+            $imagePath = public_path('storage/products');
+             $image->move($imagePath, $imageName);
 
              try {
 
@@ -73,7 +78,7 @@ class ProductsController extends Controller
                         'image' => $imageName,
                         'user_id' => Auth::id()
                     ]);
-                    Cache::forget('chached-products'.'_page_1');
+                    Cache::forget('cached-products'.'_page_1');
                     return redirect()->route('products.index')->with('msg', 'product inserted successfully');
 
              }catch(\Exception $e) {
@@ -189,5 +194,16 @@ class ProductsController extends Controller
                 return  redirect()->back()->with('msg', 'Deleted successfully');
                }
 
+    }
+
+     // ==========import and export==============//
+
+    function P_importExcel(Request $request) {
+          Excel::import(new ProductImport, $request->file('excel'));
+          return redirect()->route('products.index')->with('msg', "products has Imported successfully");
+    }
+
+    function P_exportExcel() {
+        return Excel::download(new ProductExport, 'products_information.xlsx');
     }
 }

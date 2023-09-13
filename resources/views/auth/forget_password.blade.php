@@ -2,7 +2,7 @@
 @section('title') Forget Password @endsection
 @section('contents')
 @if(session()->has('msg'))
-    <div class="alert alert-danger text-dark text-center m-3 p-3">{{ session('msg') }}</div>
+    <div class="alert alert-danger text-light text-center m-3 p-3">{{ session('msg') }}</div>
 @endif
 <section class="h-100 bg-dark my-5">
     <div class="container py-5 h-100">
